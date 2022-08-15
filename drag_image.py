@@ -1,6 +1,7 @@
 import pygame, sys
 from pygame.locals import *
 from os import path
+from debug import debug
 
 def main():  
     WIDTH, HEIGHT = (800, 600)
@@ -61,6 +62,8 @@ def main():
 
         #pygame.draw.rect(WIN, 'blue', png_rect)
         WIN.blit(png, png_rect)
+
+        debug(png.get_width())
 
         pygame.display.update()
 
