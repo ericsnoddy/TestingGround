@@ -53,10 +53,6 @@ def main():
             elif event.type == MOUSEMOTION and dragging:
                 png_rect.move_ip(event.rel)
             
-            # if event.type == MOUSEBUTTONDOWN and dragging:
-            #     dragging = False
-            #     png_rect.move_ip(event.pos)
-                
 
         WIN.fill('black')
 
