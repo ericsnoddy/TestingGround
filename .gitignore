@@ -1,0 +1,11 @@
+# Ignore all logs
+*.log
+
+# Ignore compile cache
+__pycache__/
+__pycache__/*
+
+# Ignore my scratch pad
+test.py
+scratch.py
+pygame_template.py
