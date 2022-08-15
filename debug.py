@@ -1,25 +1,21 @@
 import pygame
 pygame.init()
 
-# create a new Font object with default font, size 30
-font = pygame.font.Font(None,30)
+# Attributes
+BG_COLOR = (0,0,0)
+FONT_COLOR = (255,255,255)
+DEFAULT_X, DEFAULT_Y = (10,10)
+FONT = None  # None for pygame default font
+ANTIALIAS = True
 
-def debug(info, x = 10, y = 10):
-    # Get a reference to the current display surface
-    display_surface = pygame.display.get_surface()
+# This method converts the input to a string and displays it
+# as a rect at position topleft = (x,y), default included
 
-    # Renders our info string onto a surface with white, anti-aliased font
-    debug_surf = font.render(str(info), True, (255,255,255))
+f = pygame.font.Font(FONT,30)
 
-    # pygame.Surfaces don't have a position; this returns a rectangle with the size of our rendered string at (x,y)
+def debug(info, x = DEFAULT_X, y = DEFAULT_Y):    
+    display_surf = pygame.display.get_surface()
+    debug_surf = f.render(str(info), ANTIALIAS, FONT_COLOR)
     debug_rect = debug_surf.get_rect(topleft = (x,y))
-
-    # Draw a black rectangle containing our debug_rect onto the display_surface
-    pygame.draw.rect(display_surface, (0,0,0), debug_rect)
-
-    # Blit the rectangle onto the display surface; draw.rect() wasn't sufficient because we have a font to render.
-    display_surface.blit(debug_surf, debug_rect)
-
-
-
-
+    pygame.draw.rect(display_surf, BG_COLOR, debug_rect)
+    display_surf.blit(debug_surf, debug_rect)
