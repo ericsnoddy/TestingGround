@@ -16,7 +16,6 @@ def debug(info_list, x = TOPLEFT[0], y = TOPLEFT[1]):
     f = pygame.font.Font(FONT,30)  
     display_surf = pygame.display.get_surface()
     line_height = pygame.font.Font.get_linesize(f)
-    print(line_height)
 
     for index, line in enumerate(info_list):
         debug_surf = f.render(str(line), ANTIALIAS, FONT_COLOR)
