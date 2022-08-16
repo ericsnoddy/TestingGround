@@ -15,6 +15,10 @@ def main():
     running = True
     dragging = False
 
+    orig_png = pygame.image.load(path.join('graphics', 'spacefighter.png')).convert_alpha()
+    png = orig_png.copy()
+    png_direction = pygame.math.Vector2(1,0)
+    
     while running:        
         for event in pygame.event.get():
             if event.type == pygame.QUIT: 
@@ -25,22 +29,22 @@ def main():
                 mouse_pos = pygame.mouse.get_pos()
                 # INFLATE
                 if event.key == K_UP:
-                    png = modify_fighter(png.get_width(), 20)                   
+                    png = modify_fighter(orig_png, png, 20)                   
                     png_rect = png.get_rect(center = mouse_pos)
 
                 # DEFLATE
                 if event.key == K_DOWN:                    
-                    png = modify_fighter(png.get_width(), -20)
+                    png = modify_fighter(orig_png, png, -20)
                     png_rect = png.get_rect(center = mouse_pos)
 
                 # ROTATE CCW
                 if event.key == K_LEFT:
-                    png = modify_fighter(deg = 90)
+                    png = modify_fighter(png, deg = 90)
                     png_rect = png.get_rect(center = mouse_pos)
 
                 # ROTATE CW
                 if event.key == K_RIGHT:
-                    png = modify_fighter(deg = -90)
+                    png = modify_fighter(png, deg = -90)
                     png_rect = png.get_rect(center = mouse_pos)
 
             elif event.type == MOUSEBUTTONDOWN and not dragging:
@@ -66,13 +70,7 @@ def main():
     pygame.quit()
     sys.exit()
 
-# TOTALLY BROKEN
-# 
-
-# orig_width to be adjusted, i = increment to inflate, deg = deg to rotate
-# None + i = 0 throws error
-def modify_fighter(orig_width = None, i = 0, deg = None):
-    img = pygame.image.load(path.join('graphics', 'spacefighter.png')).convert_alpha()
+def modify_fighter(orig_png = None, i = 0, deg = None):
     aspect_ratio = img.get_height() / img.get_width()
 
     if orig_width:
