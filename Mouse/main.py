@@ -68,8 +68,7 @@ class Field:
 
             self.WIN.fill(BG_COLOR)
 
-            for m in self.mobjects:
-                self.WIN.blit(m.image, m.rect)
+            for m in self.mobjects: self.WIN.blit(m.image, m.rect)
 
             pygame.display.update()
 
