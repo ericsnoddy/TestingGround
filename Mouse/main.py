@@ -17,44 +17,60 @@ class Field:
         self.images = self.load_images()
         self.manipulable_objects = pygame.sprite.Group()
         self.mobjects = self.create_field()
+        self.current_mobject = None
 
     def load_images(self):
         i = []
         for p in self.image_paths:
-            i.append(pygame.image.load(p).convert_alpha())
+            img = pygame.image.load(p[0]).convert_alpha()
+            pos = p[1]
+            ang = p[2]
+            i.append(list((img, pos, ang)))
         return i
     
     def create_field(self):
         m = []
         for i in self.images:
-            m.append(Mobject(i, self.manipulable_objects))
+            m.append(Mobject(i[0], self.manipulable_objects, i[1], i[2]))
         return m
 
     def run(self):
 
-        running = True
-        current_mobject = None
-
-        while running:
+        while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
 
-                elif event.type == MOUSEBUTTONDOWN and not current_mobject:
-                    for m in self.mobjects:
-                        if m.rect.collidepoint(event.pos):
-                            current_mobject = m
-                elif event.type == MOUSEBUTTONDOWN and current_mobject:
-                    current_mobject = None
-                elif event.type == MOUSEMOTION and current_mobject:
-                    current_mobject.rect.move_ip(event.rel)
+                elif event.type == KEYDOWN and self.current_mobject:
+                    # INFLATE
+                    if event.key == K_UP:
+                        pass
+                    # DEFLATE
+                    if event.key == K_DOWN:
+                        pass
+                    # ROTATE CCW
+                    if event.key == K_LEFT:
+                        pass
+                    # ROTATE CW
+                    if event.key == K_RIGHT:
+                        pass
+                elif not self.current_mobject:
+                    if event.type == MOUSEBUTTONDOWN:
+                        for m in self.mobjects:
+                            if m.rect.collidepoint(event.pos):
+                                self.current_mobject = m
+                elif self.current_mobject:
+                    if event.type == MOUSEBUTTONDOWN:
+                        self.current_mobject = None
+                    elif event.type == MOUSEMOTION:
+                        self.current_mobject.rect.move_ip(event.rel)
 
             self.WIN.fill(BG_COLOR)
 
             for m in self.mobjects:
                 self.WIN.blit(m.image, m.rect)
-                
+
             pygame.display.update()
 
 if __name__ == '__main__':
