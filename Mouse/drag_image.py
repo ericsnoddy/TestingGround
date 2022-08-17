@@ -71,15 +71,16 @@ def main():
     sys.exit()
 
 def modify_fighter(orig_png = None, i = 0, deg = None):
-    aspect_ratio = img.get_height() / img.get_width()
+    pass
+    # aspect_ratio = img.get_height() / img.get_width()
 
-    if orig_width:
-        if orig_width + i >= 40 and orig_width + i <= 400:  # Cap the scaling        
-            img = pygame.transform.smoothscale(img, ((orig_width + i), (orig_width + i) * aspect_ratio))   
-        else:
-            img = pygame.transform.smoothscale(img, ((orig_width), (orig_width) * aspect_ratio))
-    if deg:
-        img = pygame.transform.rotate(img, deg)
-    return img
+    # if orig_width:
+    #     if orig_width + i >= 40 and orig_width + i <= 400:  # Cap the scaling        
+    #         img = pygame.transform.smoothscale(img, ((orig_width + i), (orig_width + i) * aspect_ratio))   
+    #     else:
+    #         img = pygame.transform.smoothscale(img, ((orig_width), (orig_width) * aspect_ratio))
+    # if deg:
+    #     img = pygame.transform.rotate(img, deg)
+    # return img
 
 main()

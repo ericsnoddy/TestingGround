@@ -1,52 +1,58 @@
-import pygame, sys
+import pygame
 from pygame.locals import *
-from os import path
-import math
-from settings import *
-# from debug import debug
+import random
 
 class Mobject(pygame.sprite.Sprite):
-    def __init__(self, image, group, topleft_pos, angle):
-        super().__init__(group)
+    def __init__(self, display_surf, image, topleft_pos, angle):
+        super().__init__()
 
-        # Current constants
+        self.display_surf = display_surf
+
+        # 'constants' - do not alter variables
         self.ORIG_IMAGE = image
+        self.ORIG_TOP = topleft_pos[0]
+        self.ORIG_LEFT = topleft_pos[1]
         self.ORIG_WIDTH = image.get_width()
         self.ORIG_HEIGHT = image.get_height()
         self.ORIG_PIXELS = self.ORIG_WIDTH * self.ORIG_HEIGHT
         self.WRATIO = self.ORIG_HEIGHT / self.ORIG_WIDTH  # float
-        self.HRATION = self.ORIG_WIDTH / self.ORIG_HEIGHT
+        self.HRATIO = self.ORIG_WIDTH / self.ORIG_HEIGHT
+        self.BOTTOM_LIMIT = self.display_surf.get_height() - self.ORIG_HEIGHT
+        self.RIGHT_LIMIT = self.display_surf.get_width() - self.ORIG_WIDTH
+        self.ORIG_ANGLE = angle
 
         self.image = image      # current modified state
         self.angle = angle      # current angle        
         self.rect = self.image.get_rect(topleft = topleft_pos)
 
-    def balloon(self, zoom = 1.2):
-        current_width = self.image.get_width()
-        copy = self.ORIG_IMAGE.copy()
+    def is_clicked(self, mouse_pos):
+        if self.rect.collidepoint(mouse_pos):
+            return True
+        else:
+            return False
 
-        if current_width * zoom >= MIN_WIDTH and current_width * zoom <= MAX_WIDTH:
-            return pygame.transform.rotozoom(copy, 0, self.__scale(zoom))
-        else: 
-            return self.image
+    def move_to(self, x, y):
+        self.rect.update(x, y, self.rect.width, self.rect.height)
 
-    # Calculates scaling between original image and desired image
-    def __scale(self, zoom):
-        w = self.image.get_width()
-        h = self.image.get_height()
-        w_ratio = h / w
-        h_ratio = w / h
+    def go_home(self):
+        self.rect.update(self.ORIG_TOP, self.ORIG_LEFT, self.rect.width, self.rect.height)
 
-        # Whore algebra how to scale a resolution
-        w_scaled = math.sqrt((w * h * zoom) / w_ratio)
-        h_scaled = math.sqrt((w * h * zoom) / h_ratio)
-        px_scaled = w_scaled * h_scaled
+    def refresh(self):
+        self.image = self.ORIG_IMAGE
+        self.angle = self.ORIG_ANGLE
+        self.rect = self.image.get_rect(topleft = (self.ORIG_TOP, self.ORIG_LEFT))
 
-        # More algebra to find scaling from current img to desired img
-        return (self.ORIG_WIDTH ** 2) * self.WRATIO / px_scaled
+    def balloon(self, flux):
+        if flux == 'inflate':
+            px = 5
+        else: px = -5
 
-    def scatter(self):
-        pass
+        w_now = self.image.get_width()
 
-
-
+        w_want = w_now + px
+        h_want = w_want * self.WRATIO
+        
+        if w_want <= self.display_surf.get_width() - 100 and h_want <= self.display_surf.get_height() - 100:
+            if w_want >= 40 and h_want >= 5:
+                self.image = pygame.transform.scale(self.ORIG_IMAGE, (w_want, h_want))
+                self.rect = self.image.get_rect(center = self.rect.center)
