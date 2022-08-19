@@ -12,11 +12,6 @@ class Piece:
         crown_path = path.join('checkers', 'assets', 'crown.png')
         crown_img = pygame.image.load(crown_path).convert_alpha()
         self.crown = pygame.transform.scale(crown_img, (44, 25))
-        
-        if self.color == RED:
-            self.direction = -1
-        else:
-            self.direction = 1
 
         self.x = 0
         self.y = 0
